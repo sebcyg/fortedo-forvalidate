@@ -11,6 +11,13 @@ Namespace Conditions
         End Function
 
         <Extension()> _
+        Public Function Test(Of TObject, TProperty)(ByVal rule As ValidationRule(Of TObject), ByVal func As Func(Of TProperty, Boolean)) As ValidationRule(Of TObject)
+            Dim condition = New TestPropCondition(Of TObject, TProperty)(func)
+            rule.AddCondition(condition)
+            Return rule
+        End Function
+
+        <Extension()> _
         Public Function Length(Of TObject)(ByVal rule As ValidationRule(Of TObject), ByVal minLength As Int32, ByVal maxLength As Int32) As ValidationRule(Of TObject)
             Dim condition = New LengthCondition(Of TObject)(minLength, maxLength)
             rule.AddCondition(condition)
