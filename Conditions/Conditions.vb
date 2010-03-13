@@ -51,5 +51,12 @@ Namespace Conditions
             rule.AddCondition(condition)
             Return rule
         End Function
+
+        <Extension()> _
+        Public Function NotEqual(Of TObject)(ByVal rule As ValidationRule(Of TObject), ByVal value As Object) As ValidationRule(Of TObject)
+            Dim condition = New NotEqualCondition(Of TObject)(value)
+            rule.AddCondition(condition)
+            Return rule
+        End Function
     End Module
 End Namespace
