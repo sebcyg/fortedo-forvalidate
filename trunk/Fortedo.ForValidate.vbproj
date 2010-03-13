@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Conditions\Conditions.vb" />
+    <Compile Include="Conditions\NotEqualCondition.vb" />
     <Compile Include="Conditions\TestPropCondition.vb" />
     <Compile Include="Conditions\ValidatesCondition.vb" />
     <Compile Include="Conditions\TestCondition.vb" />
