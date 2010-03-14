@@ -1,0 +1,75 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Fortedo.ForValidate
+</name>
+</assembly>
+<members>
+<member name="P:Fortedo.ForValidate.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Fortedo.ForValidate.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Fortedo.ForValidate.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:Fortedo.ForValidate.ValidatorBase`1.AddRule(System.String)">
+	<summary>
+ Adds new rule to selected property.
+ </summary>
+	<param name="propertyName">Name of a property the rule will be assigned to. it must be the name of the name of object property used in source code.</param>
+	<returns>Added property - it starts the fluent interface and conditions chaining.</returns>
+	<remarks></remarks>
+</member><member name="M:Fortedo.ForValidate.ValidatorBase`1.SetLang(System.String)">
+	<summary>
+ Sets language for current instance of the validator.
+ Language settings are used to determine property names provided in validation result messages.
+ </summary>
+	<param name="language">Two-letter ISO language name.</param>
+	<remarks></remarks>
+</member><member name="M:Fortedo.ForValidate.ValidatorBase`1.Validate(`0)">
+	<summary>
+ Validates entire object and returns validation result for all properties with rule set configured inside the validator.
+ </summary>
+	<param name="obj">Object being validated</param>
+	<returns>Validation result for entire object</returns>
+	<remarks></remarks>
+</member><member name="M:Fortedo.ForValidate.ValidatorBase`1.Validate(`0,System.Func{System.String,System.String})">
+	<summary>
+ Validates entire object and returns validation result for all properties with rule set configured inside the validator.
+ Each property name in validation result messages is transformed by provided function.
+ </summary>
+	<param name="obj">Object being validated</param>
+	<param name="propertyNameFunc">Function tranforming each property name in validation result messages.</param>
+	<returns>Validation result for entire object</returns>
+	<remarks>If propertyNameFunc is null (Nothing), the method is equivalent to the one with only obj parameter.</remarks>
+</member><member name="M:Fortedo.ForValidate.ValidatorBase`1.ValidateProperty(`0,System.String)">
+	<summary>
+ Validates selected property of an object and rturn validation result if there is any rule set configured for it inside the validator.
+ </summary>
+	<param name="obj">Object which property is validated</param>
+	<param name="propertyName">Name of the property being validated</param>
+	<returns>Validation result for selected property</returns>
+	<remarks>If there is no result set configured for selected property, result IsValid property will be set to True.</remarks>
+</member><member name="M:Fortedo.ForValidate.ValidatorBase`1.ValidateProperty(`0,System.String,System.Func{System.String,System.String})">
+	<summary>
+ Validates selected property of an object and rturn validation result if there is any rule set configured for it inside the validator.
+ Each property name in validation result messages is transformed by provided function.
+ </summary>
+	<param name="obj">Object which property is validated</param>
+	<param name="propertyName">Name of the property being validated</param>
+	<param name="propertyNameFunc">Function tranforming each property name in validation result messages.</param>
+	<returns>Validation result for selected property</returns>
+	<remarks>
+ If there is no result set configured for selected property, result IsValid property will be set to True.
+ If propertyNameFunc is null (Nothing), the method is equivalent to the one without only propertyNameFunc parameter.
+ </remarks>
+</member>
+</members>
+</doc>
