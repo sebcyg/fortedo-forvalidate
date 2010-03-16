@@ -46,7 +46,7 @@ Public Class ValidatorBase(Of TObject)
     ''' <remarks>If propertyNameFunc is null (Nothing), the method is equivalent to the one with only obj parameter.</remarks>
     Public Function Validate(ByVal obj As TObject, ByVal propertyNameFunc As Func(Of String, String)) As ValidationResult
         Dim result = New ValidationResult
-        For Each rule As ValidationRule(Of TObject) In _rules
+        For Each rule As ValidationRule(Of TObject) In _rules.Where(Function(r) Not IgnoredProperties.Contains(r.PropertyName))
             result.Combine(rule.Validate(obj, _language, propertyNameFunc))
         Next
         Return result
@@ -77,10 +77,21 @@ Public Class ValidatorBase(Of TObject)
     ''' </remarks>
     Public Function ValidateProperty(ByVal obj As TObject, ByVal propertyName As String, ByVal propertyNameFunc As Func(Of String, String)) As ValidationResult
         Dim result = New ValidationResult
-        For Each rule As ValidationRule(Of TObject) In _rules.Where(Function(r) r.PropertyName = propertyName)
-            result.Combine(rule.Validate(obj, _language, propertyNameFunc))
-        Next
+        If Not IgnoredProperties.Contains(propertyName) Then
+            For Each rule As ValidationRule(Of TObject) In _rules.Where(Function(r) r.PropertyName = propertyName)
+                result.Combine(rule.Validate(obj, _language, propertyNameFunc))
+            Next
+        End If
         Return result
     End Function
+
+
+    Private _ignoredProperties As New List(Of String)
+    Public ReadOnly Property IgnoredProperties() As List(Of String)
+        Get
+            Return _ignoredProperties
+        End Get
+    End Property
+
 
 End Class
