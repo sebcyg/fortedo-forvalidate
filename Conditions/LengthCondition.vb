@@ -9,13 +9,13 @@
             Implements ICondition(Of TObject).Validate
             Dim value = TryCast(propertyValue, String)
             If value Is Nothing Then
-                Return New ValidationResult(propertyName, "Właściwość $propertyName$ jest nieprawidłowa.")
+                Return New ValidationResult(propertyName, "Właściwość $propertyName$ jest nieprawidłowa.", ValidationErrorSource.Rule)
             Else
                 If value.Length >= _minLength And value.Length <= _maxLength Then
                     Return New ValidationResult
                 Else
                     Return New ValidationResult(propertyName, _
-                                                String.Format("Właściwość $propertyName$ musi mieć długość {0}-{1} znaków.", _minLength, _maxLength))
+                                                String.Format("Właściwość $propertyName$ musi mieć długość {0}-{1} znaków.", _minLength, _maxLength), ValidationErrorSource.Rule)
                 End If
             End If
         End Function

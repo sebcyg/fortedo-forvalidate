@@ -3,24 +3,33 @@ Imports System.Windows.Controls
 Imports System.Windows
 Imports System.Threading
 
+''' <summary>
+''' Binding implementation providing support for Forvalidate integration with WPF (especially MVVM/MVP)
+''' </summary>
+''' <remarks></remarks>
 Public Class BindingEx
-    Inherits BindingDecoratorBase
+    Inherits Binding
 
+    ''' <summary>
+    ''' Initializes new instance of this class. UpdateSourceTrigger is set to PropertyChanged and TargetNullValue is set to String.Empty.
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Sub New()
         MyBase.New()
-        Init()
+        Me.ValidationRules.Add(New ExceptionValidationRule)
+        Me.ValidationRules.Add(New GenericValidationRule)
+        Me.UpdateSourceTrigger = Windows.Data.UpdateSourceTrigger.PropertyChanged
+        Me.TargetNullValue = String.Empty
+        Me.UpdateSourceExceptionFilter = New UpdateSourceExceptionFilterCallback(AddressOf UpdateSourceExceptionFilterHandler)
     End Sub
 
+    ''' <summary>
+    ''' Initializes new instance of this class and set its Path property. UpdateSourceTrigger is set to PropertyChanged and TargetNullValue is set to String.Empty.
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Sub New(ByVal path As String)
         Me.New()
         Me.Path = New PropertyPath(path)
-    End Sub
-
-    Private Sub Init()
-        Me.ValidationRules.Add(New ExceptionValidationRule With {.ValidatesOnTargetUpdated = True})
-        Me.ValidationRules.Add(New GenericValidationRule With {.ValidatesOnTargetUpdated = True})
-        Me.UpdateSourceTrigger = Windows.Data.UpdateSourceTrigger.PropertyChanged
-        Me.UpdateSourceExceptionFilter = New UpdateSourceExceptionFilterCallback(AddressOf UpdateSourceExceptionFilterHandler)
     End Sub
 
     Private Function UpdateSourceExceptionFilterHandler(ByVal bindExpression As Object, ByVal exception As Exception) As Object
@@ -33,7 +42,6 @@ Public Class BindingEx
 
         Return exception.Message
     End Function
-
 End Class
 
 Public Class ErrorsToStringConverter

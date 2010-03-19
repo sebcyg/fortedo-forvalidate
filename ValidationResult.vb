@@ -30,9 +30,13 @@ Public Class ValidationResult
     Public Sub New()
     End Sub
 
-    Public Sub New(ByVal propertyName As String, ByVal message As String)
+    Public Sub New(ByVal propertyName As String, ByVal message As String, ByVal source As ValidationErrorSource)
         _errors = New List(Of ValidationError)
-        _errors.Add(New ValidationError(message))
+        _errors.Add(New ValidationError(message, source))
     End Sub
 
+    Public Sub New(ByVal propertyName As String, ByVal message As String)
+        _errors = New List(Of ValidationError)
+        _errors.Add(New ValidationError(message, ValidationErrorSource.Rule))
+    End Sub
 End Class
