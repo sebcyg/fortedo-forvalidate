@@ -1,4 +1,6 @@
 ﻿Public Class ValidationError
+    'todo add property to distinguish exception error and validation rule error
+    'todo add property for setting validated property path
     Private _message As String
     Public Property Message() As String
         Get

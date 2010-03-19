@@ -24,7 +24,7 @@ Public Class ValidationResult
     End Sub
 
     Public Overrides Function ToString() As String
-        Return If(IsValid, String.Empty, Errors(0).Message)
+        Return If(IsValid, Nothing, Errors(0).Message)
     End Function
 
     Public Sub New()
