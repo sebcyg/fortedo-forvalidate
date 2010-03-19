@@ -1,13 +1,14 @@
 ﻿Imports System.Globalization
 
-Public Class ValidatorBase(Of TObject)
+Public Class ValidatorBase(Of TObject) : Implements IValidator
+
     Private _rules As New List(Of ValidationRule(Of TObject))
     Private _language As String = CultureInfo.CurrentCulture.TwoLetterISOLanguageName
 
     ''' <summary>
     ''' Adds new rule to selected property.
     ''' </summary>
-    ''' <param name="propertyName">Name of a property the rule will be assigned to. it must be the name of the name of object property used in source code.</param>
+    ''' <param name="propertyName">Name of a property the rule will be assigned to. it must be the name of the object property used in source code.</param>
     ''' <returns>Added property - it starts the fluent interface and conditions chaining.</returns>
     ''' <remarks></remarks>
     Public Function AddRule(ByVal propertyName As String) As ValidationRule(Of TObject)
@@ -32,8 +33,8 @@ Public Class ValidatorBase(Of TObject)
     ''' <param name="obj">Object being validated</param>
     ''' <returns>Validation result for entire object</returns>
     ''' <remarks></remarks>
-    Public Function Validate(ByVal obj As TObject) As ValidationResult
-        Return Validate(obj, Nothing)
+    Public Function ValidateGeneric(ByVal obj As TObject) As ValidationResult
+        Return ValidateGeneric(obj, Nothing)
     End Function
 
     ''' <summary>
@@ -44,7 +45,7 @@ Public Class ValidatorBase(Of TObject)
     ''' <param name="propertyNameFunc">Function tranforming each property name in validation result messages.</param>
     ''' <returns>Validation result for entire object</returns>
     ''' <remarks>If propertyNameFunc is null (Nothing), the method is equivalent to the one with only obj parameter.</remarks>
-    Public Function Validate(ByVal obj As TObject, ByVal propertyNameFunc As Func(Of String, String)) As ValidationResult
+    Public Function ValidateGeneric(ByVal obj As TObject, ByVal propertyNameFunc As Func(Of String, String)) As ValidationResult
         Dim result = New ValidationResult
         For Each rule As ValidationRule(Of TObject) In _rules
             result.Combine(rule.Validate(obj, _language, propertyNameFunc))
@@ -83,4 +84,22 @@ Public Class ValidatorBase(Of TObject)
         Return result
     End Function
 
+    Public Function Validate(ByVal obj As Object) As ValidationResult Implements IValidator.Validate
+        Return ValidateGeneric(obj)
+    End Function
+
+    Public Function Validate(ByVal obj As Object, ByVal propertyName As String) As ValidationResult Implements IValidator.Validate
+        Return ValidateProperty(obj, propertyName)
+    End Function
+
+    Private Shared _instances As New Dictionary(Of Type, ValidatorBase(Of TObject))
+    Public Shared Function GetInstance(Of TValidator As {ValidatorBase(Of TObject), New})()
+        If _instances.ContainsKey(GetType(TValidator)) Then
+            Return _instances(GetType(TValidator))
+        Else
+            Dim instance = New TValidator
+            _instances.Add(GetType(TValidator), instance)
+            Return instance
+        End If
+    End Function
 End Class

@@ -4,7 +4,7 @@
 
         Public Function Validate(ByVal obj As TObject, ByVal propertyValue As Object, ByVal propertyName As String) As ValidationResult _
             Implements ICondition(Of TObject).Validate
-            Dim result = _validator.Validate(propertyValue, Function(m) m.Replace("$propertyName$", "$parentPropertyName$.$propertyName$"))
+            Dim result = _validator.ValidateGeneric(propertyValue, Function(m) m.Replace("$propertyName$", "$parentPropertyName$.$propertyName$"))
             If Not result.IsValid Then
                 For Each e In result.Errors
                     e.Message = e.Message.Replace("$parentPropertyName$", "$propertyName$")
