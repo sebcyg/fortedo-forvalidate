@@ -12,8 +12,8 @@ Public Module ValidationProxyExtensions
     End Function
 
     <Extension()> _
-    Public Function SetProxy(Of TDataModel, TValidator As {ValidatorBase(Of TDataModel), New})(ByVal target As Object) As ValidationProxy
-        Return ValidationProxy.SetProxy(target, ValidatorBase(Of TDataModel).GetInstance(Of TValidator)())
+    Public Function SetProxy(Of TValidator As {IValidator, New})(ByVal target As Object) As ValidationProxy
+        Return ValidationProxy.SetProxy(target, ValidationProxy.GetValidatorInstance(Of TValidator)())
     End Function
 
     <Extension()> _

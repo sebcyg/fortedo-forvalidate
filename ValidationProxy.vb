@@ -111,4 +111,15 @@ Public Class ValidationProxy
     Public Sub ClearPropertyException(ByVal propertyName As String)
         _propertyExceptions.Remove(propertyName)
     End Sub
+
+    Private Shared _validatorInstances As New Dictionary(Of Type, IValidator)
+    Public Shared Function GetValidatorInstance(Of TValidator As {IValidator, New})()
+        If _validatorInstances.ContainsKey(GetType(TValidator)) Then
+            Return _validatorInstances(GetType(TValidator))
+        Else
+            Dim instance = New TValidator
+            _validatorInstances.Add(GetType(TValidator), instance)
+            Return instance
+        End If
+    End Function
 End Class

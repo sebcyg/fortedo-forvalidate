@@ -91,15 +91,4 @@ Public Class ValidatorBase(Of TObject) : Implements IValidator
     Public Function Validate(ByVal obj As Object, ByVal propertyName As String) As ValidationResult Implements IValidator.Validate
         Return ValidateProperty(obj, propertyName)
     End Function
-
-    Private Shared _instances As New Dictionary(Of Type, ValidatorBase(Of TObject))
-    Public Shared Function GetInstance(Of TValidator As {ValidatorBase(Of TObject), New})()
-        If _instances.ContainsKey(GetType(TValidator)) Then
-            Return _instances(GetType(TValidator))
-        Else
-            Dim instance = New TValidator
-            _instances.Add(GetType(TValidator), instance)
-            Return instance
-        End If
-    End Function
 End Class
