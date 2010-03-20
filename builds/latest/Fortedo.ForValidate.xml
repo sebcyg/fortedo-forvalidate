@@ -6,22 +6,7 @@ Fortedo.ForValidate
 </name>
 </assembly>
 <members>
-<member name="M:Fortedo.ForValidate.BindingEx.#ctor">
-	<summary>
- Initializes new instance of this class. UpdateSourceTrigger is set to PropertyChanged and TargetNullValue is set to String.Empty.
- </summary>
-	<remarks></remarks>
-</member><member name="M:Fortedo.ForValidate.BindingEx.#ctor(System.String)">
-	<summary>
- Initializes new instance of this class and set its Path property. UpdateSourceTrigger is set to PropertyChanged and TargetNullValue is set to String.Empty.
- </summary>
-	<remarks></remarks>
-</member><member name="T:Fortedo.ForValidate.BindingEx">
-	<summary>
- Binding implementation providing support for Forvalidate integration with WPF (especially MVVM/MVP)
- </summary>
-	<remarks></remarks>
-</member><member name="P:Fortedo.ForValidate.My.Resources.Resources.ResourceManager">
+<member name="P:Fortedo.ForValidate.My.Resources.Resources.ResourceManager">
 	<summary>
   Returns the cached ResourceManager instance used by this class.
 </summary>
@@ -85,6 +70,21 @@ Fortedo.ForValidate
  If there is no result set configured for selected property, result IsValid property will be set to True.
  If propertyNameFunc is null (Nothing), the method is equivalent to the one without only propertyNameFunc parameter.
  </remarks>
+</member><member name="M:Fortedo.ForValidate.BindingEx.#ctor">
+	<summary>
+ Initializes new instance of this class. UpdateSourceTrigger is set to PropertyChanged and TargetNullValue is set to String.Empty.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Fortedo.ForValidate.BindingEx.#ctor(System.String)">
+	<summary>
+ Initializes new instance of this class and set its Path property. UpdateSourceTrigger is set to PropertyChanged and TargetNullValue is set to String.Empty.
+ </summary>
+	<remarks></remarks>
+</member><member name="T:Fortedo.ForValidate.BindingEx">
+	<summary>
+ Binding implementation providing support for Forvalidate integration with WPF (especially MVVM/MVP)
+ </summary>
+	<remarks></remarks>
 </member><member name="M:Fortedo.ForValidate.ValidationProxy.GetProxy(System.Object)">
 	<summary>
  Gets instance of proxy associated with the specified target object.
