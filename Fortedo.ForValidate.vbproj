@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindingEx.vb" />
+    <Compile Include="ForvalidateProperty.vb" />
     <Compile Include="Conditions\Conditions.vb" />
     <Compile Include="Conditions\NotEqualCondition.vb" />
     <Compile Include="Conditions\TestPropCondition.vb" />
@@ -106,7 +107,7 @@
     <Compile Include="ValidationProxy.vb" />
     <Compile Include="ValidationProxyExtensions.vb" />
     <Compile Include="ValidationResult.vb" />
-    <Compile Include="ValidationRule.vb" />
+    <Compile Include="ForvalidateRule.vb" />
     <Compile Include="ValidatorBase.vb" />
   </ItemGroup>
   <ItemGroup>

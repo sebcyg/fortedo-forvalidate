@@ -2,7 +2,7 @@
 
 Public Class ValidatorBase(Of TObject) : Implements IValidator
 
-    Private _rules As New List(Of ValidationRule(Of TObject))
+    Private _rules As New List(Of ForvalidateRule(Of TObject))
     Private _language As String = CultureInfo.CurrentCulture.TwoLetterISOLanguageName
 
     ''' <summary>
@@ -11,8 +11,8 @@ Public Class ValidatorBase(Of TObject) : Implements IValidator
     ''' <param name="propertyName">Name of a property the rule will be assigned to. it must be the name of the object property used in source code.</param>
     ''' <returns>Added property - it starts the fluent interface and conditions chaining.</returns>
     ''' <remarks></remarks>
-    Public Function AddRule(ByVal propertyName As String) As ValidationRule(Of TObject)
-        Dim rule = New ValidationRule(Of TObject)(propertyName)
+    Public Function AddRule(ByVal propertyName As String) As ForvalidateRule(Of TObject)
+        Dim rule = New ForvalidateRule(Of TObject)(propertyName)
         _rules.Add(rule)
         Return rule
     End Function
@@ -47,7 +47,7 @@ Public Class ValidatorBase(Of TObject) : Implements IValidator
     ''' <remarks>If propertyNameFunc is null (Nothing), the method is equivalent to the one with only obj parameter.</remarks>
     Public Function ValidateGeneric(ByVal obj As TObject, ByVal propertyNameFunc As Func(Of String, String)) As ValidationResult
         Dim result = New ValidationResult
-        For Each rule As ValidationRule(Of TObject) In _rules
+        For Each rule As ForvalidateRule(Of TObject) In _rules
             result.Combine(rule.Validate(obj, _language, propertyNameFunc))
         Next
         Return result
@@ -78,7 +78,7 @@ Public Class ValidatorBase(Of TObject) : Implements IValidator
     ''' </remarks>
     Public Function ValidateProperty(ByVal obj As TObject, ByVal propertyName As String, ByVal propertyNameFunc As Func(Of String, String)) As ValidationResult
         Dim result = New ValidationResult
-        For Each rule As ValidationRule(Of TObject) In _rules.Where(Function(r) r.PropertyName = propertyName)
+        For Each rule As ForvalidateRule(Of TObject) In _rules.Where(Function(r) r.ValidatedProperty.Name = propertyName)
             result.Combine(rule.Validate(obj, _language, propertyNameFunc))
         Next
         Return result
