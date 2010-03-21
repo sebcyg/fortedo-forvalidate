@@ -1,7 +1,7 @@
 ﻿Imports System.Reflection
 Imports Fortedo.ForValidate.Conditions
 
-Public Class ValidationRule(Of TObject)
+Public Class ForvalidateRule(Of TObject)
     Private Class ConditionItem
         Private _condition As ICondition(Of TObject)
         Public Property Condition() As ICondition(Of TObject)
@@ -28,16 +28,18 @@ Public Class ValidationRule(Of TObject)
         End Sub
     End Class
 
-    Private _propertyName As String
-    Private _translations As Dictionary(Of String, String)
+    Private _validatedProperty As ForvalidateProperty
+    Public Property ValidatedProperty() As ForvalidateProperty
+        Get
+            Return _validatedProperty
+        End Get
+        Private Set(ByVal value As ForvalidateProperty)
+            _validatedProperty = value
+        End Set
+    End Property
+
     Private _conditions As New List(Of ConditionItem)
     Private _lastAddedConditionItem As ConditionItem
-
-    Public ReadOnly Property PropertyName() As String
-        Get
-            Return _propertyName
-        End Get
-    End Property
 
     Public Sub AddCondition(ByVal condition As ICondition(Of TObject))
         _lastAddedConditionItem = New ConditionItem(condition)
@@ -45,18 +47,15 @@ Public Class ValidationRule(Of TObject)
     End Sub
 
     Public Sub New(ByVal propertyName As String)
-        _translations = New Dictionary(Of String, String)
-        _propertyName = propertyName
+        ValidatedProperty = New ForvalidateProperty(propertyName)
     End Sub
 
     Public Function Validate(ByVal obj As TObject, ByVal language As String, ByVal propertyNameFunc As Func(Of String, String)) As ValidationResult
         Dim result = New ValidationResult
-        Dim type = obj.GetType()
-        Dim prop = type.GetProperty(PropertyName, BindingFlags.Public Or BindingFlags.Instance Or BindingFlags.DeclaredOnly)
-        Dim value = prop.GetValue(obj, Nothing)
+        ValidatedProperty.RefreshValue(obj)
 
         For Each conditionItem In _conditions
-            result.Combine(TransformByPropertyNameFunc(ForceCustomMessages(conditionItem.Condition.Validate(obj, value, PropertyName), conditionItem.CustomMessage), propertyNameFunc))
+            result.Combine(TransformByPropertyNameFunc(ForceCustomMessages(conditionItem.Condition.Validate(obj, ValidatedProperty), conditionItem.CustomMessage), propertyNameFunc))
         Next
         Return Translate(result, language)
     End Function
@@ -82,19 +81,18 @@ Public Class ValidationRule(Of TObject)
     Private Function Translate(ByVal result As ValidationResult, ByVal language As String) As ValidationResult
         If Not result.IsValid Then
             For Each e In result.Errors
-                e.Message = e.Message.Replace("$propertyName$", _
-                                              If(_translations.ContainsKey(language), _translations(language), PropertyName))
+                e.Message = e.Message.Replace("$propertyName$", ValidatedProperty(language))
             Next
         End If
         Return result
     End Function
 
-    Public Function Lang(ByVal language As String, ByVal translatedPropertyName As String) As ValidationRule(Of TObject)
-        _translations.Add(language, translatedPropertyName)
+    Public Function Lang(ByVal language As String, ByVal translatedPropertyName As String) As ForvalidateRule(Of TObject)
+        ValidatedProperty.Translations.Add(language, translatedPropertyName)
         Return Me
     End Function
 
-    Public Function Msg(ByVal customMessage As String) As ValidationRule(Of TObject)
+    Public Function Msg(ByVal customMessage As String) As ForvalidateRule(Of TObject)
         If _lastAddedConditionItem IsNot Nothing Then
             _lastAddedConditionItem.CustomMessage = customMessage
         End If

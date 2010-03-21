@@ -1,5 +1,4 @@
 ﻿Public Class ValidationError
-    'todo add property to distinguish exception error and validation rule error
     'todo add property for setting validated property path
     Private _message As String
     Public Property Message() As String
@@ -10,7 +9,6 @@
             _message = value
         End Set
     End Property
-
 
     Private _source As ValidationErrorSource
     Public ReadOnly Property Source() As ValidationErrorSource
