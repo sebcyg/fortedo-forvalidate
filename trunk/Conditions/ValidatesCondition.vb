@@ -2,7 +2,7 @@
     Public Class ValidatesCondition(Of TObject, TNestedObject) : Implements ICondition(Of TObject)
         Private _validator As ValidatorBase(Of TNestedObject)
 
-        Public Function Validate(ByVal obj As TObject, ByVal validatedProperty As ForvalidateProperty) As ValidationResult _
+        Public Function Validate(ByVal obj As TObject, ByVal validatedProperty As ForvalidateProperty) As ForvalidateResult _
             Implements ICondition(Of TObject).Validate
             Dim result = _validator.ValidateGeneric(validatedProperty.Value, Function(m) m.Replace("$propertyName$", "$parentPropertyName$.$propertyName$"))
             If Not result.IsValid Then

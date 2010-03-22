@@ -50,8 +50,8 @@ Public Class ForvalidateRule(Of TObject)
         ValidatedProperty = New ForvalidateProperty(propertyName)
     End Sub
 
-    Public Function Validate(ByVal obj As TObject, ByVal language As String, ByVal propertyNameFunc As Func(Of String, String)) As ValidationResult
-        Dim result = New ValidationResult
+    Public Function Validate(ByVal obj As TObject, ByVal language As String, ByVal propertyNameFunc As Func(Of String, String)) As ForvalidateResult
+        Dim result = New ForvalidateResult
         ValidatedProperty.RefreshValue(obj)
 
         For Each conditionItem In _conditions
@@ -60,7 +60,7 @@ Public Class ForvalidateRule(Of TObject)
         Return Translate(result, language)
     End Function
 
-    Private Function ForceCustomMessages(ByVal result As ValidationResult, ByVal customMessage As String)
+    Private Function ForceCustomMessages(ByVal result As ForvalidateResult, ByVal customMessage As String)
         If Not (result.IsValid Or String.IsNullOrEmpty(customMessage)) Then
             For Each e In result.Errors
                 e.Message = customMessage
@@ -69,7 +69,7 @@ Public Class ForvalidateRule(Of TObject)
         Return result
     End Function
 
-    Private Function TransformByPropertyNameFunc(ByVal result As ValidationResult, ByVal propertyNameFunc As Func(Of String, String)) As ValidationResult
+    Private Function TransformByPropertyNameFunc(ByVal result As ForvalidateResult, ByVal propertyNameFunc As Func(Of String, String)) As ForvalidateResult
         If Not (result.IsValid Or (propertyNameFunc Is Nothing)) Then
             For Each e In result.Errors
                 e.Message = propertyNameFunc(e.Message)
@@ -78,7 +78,7 @@ Public Class ForvalidateRule(Of TObject)
         Return result
     End Function
 
-    Private Function Translate(ByVal result As ValidationResult, ByVal language As String) As ValidationResult
+    Private Function Translate(ByVal result As ForvalidateResult, ByVal language As String) As ForvalidateResult
         If Not result.IsValid Then
             For Each e In result.Errors
                 e.Message = e.Message.Replace("$propertyName$", ValidatedProperty(language))

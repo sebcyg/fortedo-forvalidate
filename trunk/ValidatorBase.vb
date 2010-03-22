@@ -33,7 +33,7 @@ Public Class ValidatorBase(Of TObject) : Implements IValidator
     ''' <param name="obj">Object being validated</param>
     ''' <returns>Validation result for entire object</returns>
     ''' <remarks></remarks>
-    Public Function ValidateGeneric(ByVal obj As TObject) As ValidationResult
+    Public Function ValidateGeneric(ByVal obj As TObject) As ForvalidateResult
         Return ValidateGeneric(obj, Nothing)
     End Function
 
@@ -45,8 +45,8 @@ Public Class ValidatorBase(Of TObject) : Implements IValidator
     ''' <param name="propertyNameFunc">Function tranforming each property name in validation result messages.</param>
     ''' <returns>Validation result for entire object</returns>
     ''' <remarks>If propertyNameFunc is null (Nothing), the method is equivalent to the one with only obj parameter.</remarks>
-    Public Function ValidateGeneric(ByVal obj As TObject, ByVal propertyNameFunc As Func(Of String, String)) As ValidationResult
-        Dim result = New ValidationResult
+    Public Function ValidateGeneric(ByVal obj As TObject, ByVal propertyNameFunc As Func(Of String, String)) As ForvalidateResult
+        Dim result = New ForvalidateResult
         For Each rule As ForvalidateRule(Of TObject) In _rules
             result.Combine(rule.Validate(obj, _language, propertyNameFunc))
         Next
@@ -60,7 +60,7 @@ Public Class ValidatorBase(Of TObject) : Implements IValidator
     ''' <param name="propertyName">Name of the property being validated</param>
     ''' <returns>Validation result for selected property</returns>
     ''' <remarks>If there is no result set configured for selected property, result IsValid property will be set to True.</remarks>
-    Public Function ValidateProperty(ByVal obj As TObject, ByVal propertyName As String) As ValidationResult
+    Public Function ValidateProperty(ByVal obj As TObject, ByVal propertyName As String) As ForvalidateResult
         Return ValidateProperty(obj, propertyName, Nothing)
     End Function
 
@@ -76,19 +76,19 @@ Public Class ValidatorBase(Of TObject) : Implements IValidator
     ''' If there is no result set configured for selected property, result IsValid property will be set to True.
     ''' If propertyNameFunc is null (Nothing), the method is equivalent to the one without only propertyNameFunc parameter.
     ''' </remarks>
-    Public Function ValidateProperty(ByVal obj As TObject, ByVal propertyName As String, ByVal propertyNameFunc As Func(Of String, String)) As ValidationResult
-        Dim result = New ValidationResult
+    Public Function ValidateProperty(ByVal obj As TObject, ByVal propertyName As String, ByVal propertyNameFunc As Func(Of String, String)) As ForvalidateResult
+        Dim result = New ForvalidateResult
         For Each rule As ForvalidateRule(Of TObject) In _rules.Where(Function(r) r.ValidatedProperty.Name = propertyName)
             result.Combine(rule.Validate(obj, _language, propertyNameFunc))
         Next
         Return result
     End Function
 
-    Public Function Validate(ByVal obj As Object) As ValidationResult Implements IValidator.Validate
+    Public Function Validate(ByVal obj As Object) As ForvalidateResult Implements IValidator.Validate
         Return ValidateGeneric(obj)
     End Function
 
-    Public Function Validate(ByVal obj As Object, ByVal propertyName As String) As ValidationResult Implements IValidator.Validate
+    Public Function Validate(ByVal obj As Object, ByVal propertyName As String) As ForvalidateResult Implements IValidator.Validate
         Return ValidateProperty(obj, propertyName)
     End Function
 End Class

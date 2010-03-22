@@ -1,5 +1,5 @@
 ﻿
-Public Class ValidationResult
+Public Class ForvalidateResult
 
     Public ReadOnly Property IsValid() As Boolean
         Get
@@ -7,17 +7,17 @@ Public Class ValidationResult
         End Get
     End Property
 
-    Private _errors As List(Of ValidationError)
-    Public ReadOnly Property Errors() As List(Of ValidationError)
+    Private _errors As List(Of ForvalidateError)
+    Public ReadOnly Property Errors() As List(Of ForvalidateError)
         Get
             Return _errors
         End Get
     End Property
 
-    Public Sub Combine(ByVal result As ValidationResult)
+    Public Sub Combine(ByVal result As ForvalidateResult)
         If Not result.IsValid Then
             If _errors Is Nothing Then
-                _errors = New List(Of ValidationError)
+                _errors = New List(Of ForvalidateError)
             End If
             _errors.AddRange(result.Errors)
         End If
@@ -31,12 +31,12 @@ Public Class ValidationResult
     End Sub
 
     Public Sub New(ByVal propertyName As String, ByVal message As String, ByVal source As ValidationErrorSource)
-        _errors = New List(Of ValidationError)
-        _errors.Add(New ValidationError(message, source))
+        _errors = New List(Of ForvalidateError)
+        _errors.Add(New ForvalidateError(message, source))
     End Sub
 
     Public Sub New(ByVal propertyName As String, ByVal message As String)
-        _errors = New List(Of ValidationError)
-        _errors.Add(New ValidationError(message, ValidationErrorSource.Rule))
+        _errors = New List(Of ForvalidateError)
+        _errors.Add(New ForvalidateError(message, ValidationErrorSource.Rule))
     End Sub
 End Class

@@ -1,4 +1,4 @@
-﻿Public Class ValidationError
+﻿Public Class ForvalidateError
     'todo add property for setting validated property path
     Private _message As String
     Public Property Message() As String
