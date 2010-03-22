@@ -66,10 +66,10 @@ Public Class ValidationProxy
     ''' </summary>
     ''' <returns>Validation result containing possible errors collection.</returns>
     ''' <remarks>Returned results contains both, the exception errors (from WPF) and the validation ones (from validator).</remarks>
-    Public Function Validate() As ValidationResult
+    Public Function Validate() As ForvalidateResult
         Dim result = _validator.Validate(Target)
         For Each item In _propertyExceptions
-            result.Combine(New ValidationResult(item.Key, item.Value.Message, ValidationErrorSource.Rule))
+            result.Combine(New ForvalidateResult(item.Key, item.Value.Message, ValidationErrorSource.Rule))
         Next
         Return result
     End Function
@@ -79,7 +79,7 @@ Public Class ValidationProxy
     ''' </summary>
     ''' <returns>Validation result containing possible errors collection.</returns>
     ''' <remarks>Returned results contains both, the exception errors (from WPF) and the validation ones (from validator).</remarks>
-    Public Function Validate(ByVal propertyName As String) As ValidationResult
+    Public Function Validate(ByVal propertyName As String) As ForvalidateResult
         Return _validator.Validate(Target, propertyName)
     End Function
 

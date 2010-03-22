@@ -2,12 +2,12 @@
 
     Public Class NotNullCondition(Of TObject) : Implements ICondition(Of TObject)
 
-        Public Function Validate(ByVal obj As TObject, ByVal validatedProperty As ForvalidateProperty) As ValidationResult _
+        Public Function Validate(ByVal obj As TObject, ByVal validatedProperty As ForvalidateProperty) As ForvalidateResult _
             Implements ICondition(Of TObject).Validate
             If validatedProperty.Value Is Nothing Then
-                Return New ValidationResult(validatedProperty.Name, "Właściwość $propertyName$ nie może być pusta.")
+                Return New ForvalidateResult(validatedProperty.Name, "Właściwość $propertyName$ nie może być pusta.")
             Else
-                Return New ValidationResult
+                Return New ForvalidateResult
             End If
         End Function
 

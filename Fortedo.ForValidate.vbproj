@@ -103,10 +103,10 @@
     </Compile>
     <Compile Include="Conditions\NotEmptyCondition.vb" />
     <Compile Include="Conditions\NotNullCondition.vb" />
-    <Compile Include="ValidationError.vb" />
+    <Compile Include="ForvalidateError.vb" />
     <Compile Include="ValidationProxy.vb" />
     <Compile Include="ValidationProxyExtensions.vb" />
-    <Compile Include="ValidationResult.vb" />
+    <Compile Include="ForvalidateResult.vb" />
     <Compile Include="ForvalidateRule.vb" />
     <Compile Include="ValidatorBase.vb" />
   </ItemGroup>

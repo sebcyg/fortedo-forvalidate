@@ -2,12 +2,12 @@
     Public Class TestPropCondition(Of TObject, TPropertyType) : Implements ICondition(Of TObject)
         Private _validateFunc As Func(Of TPropertyType, Boolean)
 
-        Public Function Validate(ByVal obj As TObject, ByVal validatedProperty As ForvalidateProperty) As ValidationResult _
+        Public Function Validate(ByVal obj As TObject, ByVal validatedProperty As ForvalidateProperty) As ForvalidateResult _
             Implements ICondition(Of TObject).Validate
             If _validateFunc(validatedProperty.Value) Then
-                Return New ValidationResult
+                Return New ForvalidateResult
             Else
-                Return New ValidationResult(validatedProperty.Name, "Właściwość $propertyName$ jest nieprawidłowa.")
+                Return New ForvalidateResult(validatedProperty.Name, "Właściwość $propertyName$ jest nieprawidłowa.")
             End If
         End Function
 
