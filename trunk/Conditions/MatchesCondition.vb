@@ -3,26 +3,26 @@
 Namespace Conditions
 
 
-    Public Class MatchesCondition(Of TObject) : Implements ICondition(Of TObject)
-        Private _regex As Regex
+    Public Class MatchesCondition
+        Inherits FvConditionBase
 
-        Public Function Validate(ByVal obj As TObject, ByVal validatedProperty As ForvalidateProperty) As ForvalidateResult _
-            Implements ICondition(Of TObject).Validate
-            Dim value = TryCast(validatedProperty.Value, String)
-            If value Is Nothing Then
-                Return New ForvalidateResult
-            Else
-                If _regex.IsMatch(value) Then
-                    Return New ForvalidateResult
-                Else
-                    Return New ForvalidateResult(validatedProperty.Name, "Właściwość $propertyName$ nie jest zgodna ze wzorcem.")
-                End If
-            End If
-        End Function
+        Private _regex As Regex
 
         Public Sub New(ByVal pattern As String)
             _regex = New Regex(pattern)
         End Sub
 
+        Protected Overrides Function OnValidate(ByVal context As FvContext) As String
+            Dim value = TryCast(context.PropertyValue, String)
+            If value Is Nothing Then
+                Return Nothing
+            Else
+                If _regex.IsMatch(value) Then
+                    Return Nothing
+                Else
+                    Return "Właściwość $propertyName$ nie jest zgodna ze wzorcem."
+                End If
+            End If
+        End Function
     End Class
 End Namespace

@@ -1,15 +1,15 @@
 ﻿Namespace Conditions
-    Public Class TestCondition(Of TObject)
+    Public Class EnsureCondition(Of TPropertyType)
         Inherits FvConditionBase
 
-        Private _validateFunc As Func(Of TObject, Boolean)
+        Private _validateFunc As Func(Of TPropertyType, Boolean)
 
-        Public Sub New(ByVal func As Func(Of TObject, Boolean))
+        Public Sub New(ByVal func As Func(Of TPropertyType, Boolean))
             _validateFunc = func
         End Sub
 
         Protected Overrides Function OnValidate(ByVal context As FvContext) As String
-            If _validateFunc(context.Target) Then
+            If _validateFunc(context.PropertyValue) Then
                 Return Nothing
             Else
                 Return "Właściwość $propertyName$ jest nieprawidłowa."

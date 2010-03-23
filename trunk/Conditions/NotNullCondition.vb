@@ -1,15 +1,13 @@
 ﻿Namespace Conditions
 
-    Public Class NotNullCondition(Of TObject) : Implements ICondition(Of TObject)
+    Public Class NotNullCondition
+        Inherits FvConditionBase
 
-        Public Function Validate(ByVal obj As TObject, ByVal validatedProperty As ForvalidateProperty) As ForvalidateResult _
-            Implements ICondition(Of TObject).Validate
-            If validatedProperty.Value Is Nothing Then
-                Return New ForvalidateResult(validatedProperty.Name, "Właściwość $propertyName$ nie może być pusta.")
-            Else
-                Return New ForvalidateResult
+        Protected Overrides Function OnValidate(ByVal context As FvContext) As String
+            If context.PropertyValue Is Nothing Then
+                Return "Właściwość $propertyName$ nie może być pusta."
             End If
+            Return Nothing
         End Function
-
     End Class
 End Namespace

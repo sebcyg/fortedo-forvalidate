@@ -75,17 +75,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindingEx.vb" />
-    <Compile Include="ForvalidateProperty.vb" />
-    <Compile Include="Conditions\Conditions.vb" />
     <Compile Include="Conditions\NotEqualCondition.vb" />
-    <Compile Include="Conditions\TestPropCondition.vb" />
-    <Compile Include="Conditions\ValidatesCondition.vb" />
+    <Compile Include="FvConditionBase.vb" />
+    <Compile Include="Conditions\EnsureCondition.vb" />
     <Compile Include="Conditions\TestCondition.vb" />
-    <Compile Include="Conditions\ICondition.vb" />
     <Compile Include="Conditions\LengthCondition.vb" />
     <Compile Include="Conditions\MatchesCondition.vb" />
+    <Compile Include="FvConditionExtensions.vb" />
+    <Compile Include="FvConditionRule.vb" />
+    <Compile Include="FvContext.vb" />
+    <Compile Include="FvError.vb" />
+    <Compile Include="FvNestedRule.vb" />
+    <Compile Include="FvProperty.vb" />
+    <Compile Include="FvPropertyChain.vb" />
+    <Compile Include="FvResult.vb" />
+    <Compile Include="FvRuleBase.vb" />
+    <Compile Include="FvRuleExtensions.vb" />
+    <Compile Include="FvValidatorBase.vb" />
+    <Compile Include="FvValidatorExtensions.vb" />
     <Compile Include="GenericValidationRule.vb" />
-    <Compile Include="IValidator.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -103,12 +111,8 @@
     </Compile>
     <Compile Include="Conditions\NotEmptyCondition.vb" />
     <Compile Include="Conditions\NotNullCondition.vb" />
-    <Compile Include="ForvalidateError.vb" />
     <Compile Include="ValidationProxy.vb" />
     <Compile Include="ValidationProxyExtensions.vb" />
-    <Compile Include="ForvalidateResult.vb" />
-    <Compile Include="ForvalidateRule.vb" />
-    <Compile Include="ValidatorBase.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
