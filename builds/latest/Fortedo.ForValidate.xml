@@ -19,111 +19,59 @@ Fortedo.ForValidate
 	<summary>
   A strongly-typed resource class, for looking up localized strings, etc.
 </summary>
-</member><member name="M:Fortedo.ForValidate.ValidatorBase`1.AddRule(System.String)">
-	<summary>
- Adds new rule to selected property.
- </summary>
-	<param name="propertyName">Name of a property the rule will be assigned to. it must be the name of the object property used in source code.</param>
-	<returns>Added property - it starts the fluent interface and conditions chaining.</returns>
-	<remarks></remarks>
-</member><member name="M:Fortedo.ForValidate.ValidatorBase`1.SetLang(System.String)">
-	<summary>
- Sets language for current instance of the validator.
- Language settings are used to determine property names provided in validation result messages.
- </summary>
-	<param name="language">Two-letter ISO language name.</param>
-	<remarks></remarks>
-</member><member name="M:Fortedo.ForValidate.ValidatorBase`1.ValidateGeneric(`0)">
-	<summary>
- Validates entire object and returns validation result for all properties with rule set configured inside the validator.
- </summary>
-	<param name="obj">Object being validated</param>
-	<returns>Validation result for entire object</returns>
-	<remarks></remarks>
-</member><member name="M:Fortedo.ForValidate.ValidatorBase`1.ValidateGeneric(`0,System.Func{System.String,System.String})">
-	<summary>
- Validates entire object and returns validation result for all properties with rule set configured inside the validator.
- Each property name in validation result messages is transformed by provided function.
- </summary>
-	<param name="obj">Object being validated</param>
-	<param name="propertyNameFunc">Function tranforming each property name in validation result messages.</param>
-	<returns>Validation result for entire object</returns>
-	<remarks>If propertyNameFunc is null (Nothing), the method is equivalent to the one with only obj parameter.</remarks>
-</member><member name="M:Fortedo.ForValidate.ValidatorBase`1.ValidateProperty(`0,System.String)">
-	<summary>
- Validates selected property of an object and rturn validation result if there is any rule set configured for it inside the validator.
- </summary>
-	<param name="obj">Object which property is validated</param>
-	<param name="propertyName">Name of the property being validated</param>
-	<returns>Validation result for selected property</returns>
-	<remarks>If there is no result set configured for selected property, result IsValid property will be set to True.</remarks>
-</member><member name="M:Fortedo.ForValidate.ValidatorBase`1.ValidateProperty(`0,System.String,System.Func{System.String,System.String})">
-	<summary>
- Validates selected property of an object and rturn validation result if there is any rule set configured for it inside the validator.
- Each property name in validation result messages is transformed by provided function.
- </summary>
-	<param name="obj">Object which property is validated</param>
-	<param name="propertyName">Name of the property being validated</param>
-	<param name="propertyNameFunc">Function tranforming each property name in validation result messages.</param>
-	<returns>Validation result for selected property</returns>
-	<remarks>
- If there is no result set configured for selected property, result IsValid property will be set to True.
- If propertyNameFunc is null (Nothing), the method is equivalent to the one without only propertyNameFunc parameter.
- </remarks>
-</member><member name="M:Fortedo.ForValidate.BindingEx.#ctor">
-	<summary>
- Initializes new instance of this class. UpdateSourceTrigger is set to PropertyChanged and TargetNullValue is set to String.Empty.
- </summary>
-	<remarks></remarks>
-</member><member name="M:Fortedo.ForValidate.BindingEx.#ctor(System.String)">
-	<summary>
- Initializes new instance of this class and set its Path property. UpdateSourceTrigger is set to PropertyChanged and TargetNullValue is set to String.Empty.
- </summary>
-	<remarks></remarks>
-</member><member name="T:Fortedo.ForValidate.BindingEx">
-	<summary>
- Binding implementation providing support for Forvalidate integration with WPF (especially MVVM/MVP)
- </summary>
-	<remarks></remarks>
-</member><member name="M:Fortedo.ForValidate.ValidationProxy.GetProxy(System.Object)">
+</member><member name="M:Fortedo.ForValidate.Wpf.FvProxy.GetProxy(System.Object)">
 	<summary>
  Gets instance of proxy associated with the specified target object.
  </summary>
 	<param name="target">The object which proxy is about to being get.</param>
 	<returns>The proxy associated with the specified object, if found; otherwise, null (Nothing in VB). </returns>
 	<remarks></remarks>
-</member><member name="M:Fortedo.ForValidate.ValidationProxy.SetProxy(System.Object,Fortedo.ForValidate.IValidator)">
+</member><member name="M:Fortedo.ForValidate.Wpf.FvProxy.Connect``1(System.Object)">
 	<summary>
  Sets proxy for the specified target object and adds the specified validator to metadata of the proxy.
  </summary>
 	<param name="target">The object which proxy is about to being set.</param>
-	<param name="validator">The validator instance associated with object.</param>
 	<returns>The proxy set by the method.</returns>
 	<remarks>If a proxy for the specified target exists, the method does not create a new one, but changes associated validator only.</remarks>
-</member><member name="P:Fortedo.ForValidate.ValidationProxy.Target">
+</member><member name="P:Fortedo.ForValidate.Wpf.FvProxy.Target">
 	<summary>
  Gets the target object of the proxy.
  </summary>
 	<value></value>
 	<returns>The target object of the proxy</returns>
 	<remarks>target object is stored as a WeakReference to avoid memory leaks.</remarks>
-</member><member name="M:Fortedo.ForValidate.ValidationProxy.Validate">
+</member><member name="M:Fortedo.ForValidate.Wpf.FvProxy.Validate">
 	<summary>
  Validates the entire target object of the proxy using the validator associated with the proxy.
  </summary>
 	<returns>Validation result containing possible errors collection.</returns>
 	<remarks>Returned results contains both, the exception errors (from WPF) and the validation ones (from validator).</remarks>
-</member><member name="M:Fortedo.ForValidate.ValidationProxy.Validate(System.String)">
+</member><member name="M:Fortedo.ForValidate.Wpf.FvProxy.Validate(System.String)">
 	<summary>
  Validates one of properties of target object specified by the property name. validation is executed using the validator associated with the proxy.
  </summary>
 	<returns>Validation result containing possible errors collection.</returns>
 	<remarks>Returned results contains both, the exception errors (from WPF) and the validation ones (from validator).</remarks>
-</member><member name="T:Fortedo.ForValidate.ValidationProxy">
+</member><member name="T:Fortedo.ForValidate.Wpf.FvProxy">
 	<summary>
  Represents a proxy to integrate Forvalidate framework with WPF.
  </summary>
 	<remarks>Each Proxy object consists of metadata extending data model object bound to WPF UI elements.</remarks>
+</member><member name="M:Fortedo.ForValidate.Wpf.FvBinding.#ctor">
+	<summary>
+ Initializes new instance of this class. UpdateSourceTrigger is set to PropertyChanged and TargetNullValue is set to String.Empty.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Fortedo.ForValidate.Wpf.FvBinding.#ctor(System.String)">
+	<summary>
+ Initializes new instance of this class and set its Path property. UpdateSourceTrigger is set to PropertyChanged and TargetNullValue is set to String.Empty.
+ </summary>
+	<remarks></remarks>
+</member><member name="T:Fortedo.ForValidate.Wpf.FvBinding">
+	<summary>
+ Binding implementation providing support for Forvalidate integration with WPF (especially MVVM/MVP)
+ </summary>
+	<remarks></remarks>
 </member>
 </members>
 </doc>
