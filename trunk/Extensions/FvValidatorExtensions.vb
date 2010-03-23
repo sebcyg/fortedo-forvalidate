@@ -27,19 +27,8 @@ Namespace Extensions
         Public Function Validate(ByVal validator As FvValidatorBase, ByVal obj As Object, ByVal propertyPath As String) As FvResult
             Dim context = New FvContext(obj)
             Dim specifiedChain = New FvPropertyChain(propertyPath)
-            context.FilterPropertyHandler = Function(chain) CompareChains(chain, specifiedChain)
+            context.FilterPropertyHandler = Function(chain) chain.CheckSimilarity(specifiedChain)
             Return validator.Validate(context)
-        End Function
-
-        Private Function CompareChains(ByVal chainValidated As FvPropertyChain, ByVal chainSpecified As FvPropertyChain) As Boolean
-            Dim i As Integer
-            For Each prop In chainValidated
-                If chainSpecified.Count > i AndAlso prop.Name <> chainSpecified(i).Name Then
-                    Return False
-                End If
-                i += 1
-            Next
-            Return True
         End Function
     End Module
 End Namespace
