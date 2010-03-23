@@ -9,8 +9,18 @@ Namespace Wpf
     ''' Binding implementation providing support for Forvalidate integration with WPF (especially MVVM/MVP)
     ''' </summary>
     ''' <remarks></remarks>
-    Public Class BindingEx
+    Public Class FvBinding
         Inherits Binding
+
+        Private _message As String
+        Public Property Message() As String
+            Get
+                Return _message
+            End Get
+            Set(ByVal value As String)
+                _message = value
+            End Set
+        End Property
 
         ''' <summary>
         ''' Initializes new instance of this class. UpdateSourceTrigger is set to PropertyChanged and TargetNullValue is set to String.Empty.
@@ -19,7 +29,7 @@ Namespace Wpf
         Public Sub New()
             MyBase.New()
             Me.ValidationRules.Add(New ExceptionValidationRule)
-            Me.ValidationRules.Add(New GenericValidationRule)
+            Me.ValidationRules.Add(New FvWpfValidationRule)
             Me.UpdateSourceTrigger = Windows.Data.UpdateSourceTrigger.PropertyChanged
             Me.TargetNullValue = String.Empty
             Me.UpdateSourceExceptionFilter = New UpdateSourceExceptionFilterCallback(AddressOf UpdateSourceExceptionFilterHandler)
@@ -36,13 +46,15 @@ Namespace Wpf
 
         Private Function UpdateSourceExceptionFilterHandler(ByVal bindExpression As Object, ByVal exception As Exception) As Object
             Dim bindingExp As BindingExpression = bindExpression
-            Dim proxy = ValidationProxy.GetProxy(bindingExp.DataItem)
+            Dim proxy = FvProxy.GetProxy(bindingExp.DataItem)
+            Dim message As String
+            message = If(Me.Message, exception.Message)
             If proxy IsNot Nothing Then
-                proxy.SetPropertyException(bindingExp.ParentBinding.Path.Path, exception)
+                proxy.SetPropertyException(bindingExp.ParentBinding.Path.Path, message)
                 proxy.AddInvalidatedBindingExpression(bindingExp)
             End If
 
-            Return exception.Message
+            Return message
         End Function
     End Class
 

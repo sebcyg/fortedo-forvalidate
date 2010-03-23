@@ -3,12 +3,12 @@ Imports System.Windows.Controls
 
 Namespace Wpf
 
-    Public Class GenericValidationRule
+    Public Class FvWpfValidationRule
         Inherits ValidationRule
 
         Public Overrides Function Validate(ByVal value As Object, ByVal cultureInfo As System.Globalization.CultureInfo) As ValidationResult
             Dim bindingExp As BindingExpression = value
-            Dim proxy = ValidationProxy.GetProxy(bindingExp.DataItem)
+            Dim proxy = FvProxy.GetProxy(bindingExp.DataItem)
             If proxy IsNot Nothing Then
                 Dim propertyPath = bindingExp.ParentBinding.Path.Path
                 'bug what if binding is used in several bindingexpression and in one is valid but not in the other
@@ -19,7 +19,7 @@ Namespace Wpf
                     Return System.Windows.Controls.ValidationResult.ValidResult
                 Else
                     proxy.AddInvalidatedBindingExpression(bindingExp)
-                    Return New System.Windows.Controls.ValidationResult(False, result.ToString())
+                    Return New System.Windows.Controls.ValidationResult(False, result.Errors(0).Content)
                 End If
             Else
                 Return System.Windows.Controls.ValidationResult.ValidResult
