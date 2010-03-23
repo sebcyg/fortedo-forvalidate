@@ -74,14 +74,14 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BindingEx.vb" />
+    <Compile Include="Wpf\BindingEx.vb" />
     <Compile Include="Conditions\NotEqualCondition.vb" />
     <Compile Include="FvConditionBase.vb" />
     <Compile Include="Conditions\EnsureCondition.vb" />
     <Compile Include="Conditions\TestCondition.vb" />
     <Compile Include="Conditions\LengthCondition.vb" />
     <Compile Include="Conditions\MatchesCondition.vb" />
-    <Compile Include="FvConditionExtensions.vb" />
+    <Compile Include="Extensions\FvConditionExtensions.vb" />
     <Compile Include="FvConditionRule.vb" />
     <Compile Include="FvContext.vb" />
     <Compile Include="FvError.vb" />
@@ -90,10 +90,10 @@
     <Compile Include="FvPropertyChain.vb" />
     <Compile Include="FvResult.vb" />
     <Compile Include="FvRuleBase.vb" />
-    <Compile Include="FvRuleExtensions.vb" />
+    <Compile Include="Extensions\FvRuleExtensions.vb" />
     <Compile Include="FvValidatorBase.vb" />
-    <Compile Include="FvValidatorExtensions.vb" />
-    <Compile Include="GenericValidationRule.vb" />
+    <Compile Include="Extensions\FvValidatorExtensions.vb" />
+    <Compile Include="Wpf\GenericValidationRule.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -111,8 +111,8 @@
     </Compile>
     <Compile Include="Conditions\NotEmptyCondition.vb" />
     <Compile Include="Conditions\NotNullCondition.vb" />
-    <Compile Include="ValidationProxy.vb" />
-    <Compile Include="ValidationProxyExtensions.vb" />
+    <Compile Include="Wpf\ValidationProxy.vb" />
+    <Compile Include="Wpf\ValidationProxyExtensions.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
