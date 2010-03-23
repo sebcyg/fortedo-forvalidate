@@ -19,28 +19,31 @@ Namespace Wpf
         ''' <returns>The proxy associated with the specified object, if found; otherwise, null (Nothing in VB). </returns>
         ''' <remarks></remarks>
         Public Shared Function GetProxy(ByVal target As Object) As FvProxy
-            Return _proxies.Find(Function(p) Object.ReferenceEquals(p.Target, target))
+            Dim proxy = _proxies.Find(Function(p) Object.ReferenceEquals(p.Target, target))
+            If proxy Is Nothing Then
+                Throw New ArgumentException("There is no proxy connected to the specified target.")
+            End If
+            Return proxy
         End Function
 
         ''' <summary>
         ''' Sets proxy for the specified target object and adds the specified validator to metadata of the proxy.
         ''' </summary>
         ''' <param name="target">The object which proxy is about to being set.</param>
-        ''' <param name="validator">The validator instance associated with object.</param>
         ''' <returns>The proxy set by the method.</returns>
         ''' <remarks>If a proxy for the specified target exists, the method does not create a new one, but changes associated validator only.</remarks>
-        Public Shared Function SetProxy(ByVal target As Object, ByVal validator As FvValidatorBase) As FvProxy
-            Dim proxy = GetProxy(target)
+        Public Shared Function Connect(Of TValidator As {FvValidatorBase, New})(ByVal target As Object) As FvProxy
+            Dim proxy = _proxies.Find(Function(p) Object.ReferenceEquals(p.Target, target))
             If proxy IsNot Nothing Then
-                proxy._validator = validator
+                proxy._validator = New TValidator
             Else
-                proxy = New FvProxy(target, validator)
+                proxy = New FvProxy(target, New TValidator)
                 _proxies.Add(proxy)
             End If
             Return proxy
         End Function
 
-        Public Shared Sub RemoveProxy(ByVal target As Object)
+        Public Shared Sub Disconnect(ByVal target As Object)
             Dim proxy = GetProxy(target)
             If proxy IsNot Nothing Then
                 _proxies.Remove(proxy)
@@ -127,16 +130,5 @@ Namespace Wpf
             End If
         End Sub
 
-        Private Shared _validatorInstances As New Dictionary(Of Type, FvValidatorBase)
-        Public Shared Function GetValidatorInstance(Of TValidator As {FvValidatorBase, New})()
-            Dim type = GetType(TValidator)
-            If _validatorInstances.ContainsKey(type) Then
-                Return _validatorInstances(type)
-            Else
-                Dim instance = New TValidator
-                _validatorInstances.Add(type, instance)
-                Return instance
-            End If
-        End Function
     End Class
 End Namespace
