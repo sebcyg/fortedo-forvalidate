@@ -1,19 +1,21 @@
-﻿Namespace Conditions
-    Public Class NotEqualCondition(Of TObject) : Implements ICondition(Of TObject)
+﻿Imports Fortedo.ForValidate
+
+Namespace Conditions
+    Public Class NotEqualCondition
+        Inherits FvConditionBase
+
         Private _equalValue As Object
 
-        Public Function Validate(ByVal obj As TObject, ByVal validatedProperty As ForvalidateProperty) As ForvalidateResult _
-            Implements ICondition(Of TObject).Validate
-            If _equalValue = validatedProperty.Value Then
-                Return New ForvalidateResult(validatedProperty.Name, String.Format("Właściwość $propertyName$ musi być różna od '{0}'.", _equalValue))
-            Else
-                Return New ForvalidateResult
-            End If
-        End Function
-
         Public Sub New(ByVal value As Object)
+            MyBase.New()
             _equalValue = value
         End Sub
 
+        Protected Overrides Function OnValidate(ByVal context As FvContext) As String
+            If _equalValue = context.PropertyValue Then
+                Return String.Format("Właściwość $propertyName$ musi być różna od '{0}'.", _equalValue)
+            End If
+            Return Nothing
+        End Function
     End Class
 End Namespace

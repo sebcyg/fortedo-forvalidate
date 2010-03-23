@@ -26,7 +26,7 @@ Public Class ValidationProxy
     ''' <param name="validator">The validator instance associated with object.</param>
     ''' <returns>The proxy set by the method.</returns>
     ''' <remarks>If a proxy for the specified target exists, the method does not create a new one, but changes associated validator only.</remarks>
-    Public Shared Function SetProxy(ByVal target As Object, ByVal validator As IValidator) As ValidationProxy
+    Public Shared Function SetProxy(ByVal target As Object, ByVal validator As FvValidatorBase) As ValidationProxy
         Dim proxy = GetProxy(target)
         If proxy IsNot Nothing Then
             proxy._validator = validator
@@ -45,8 +45,8 @@ Public Class ValidationProxy
     End Sub
 
     Private _targetReference As WeakReference
-    Private _validator As IValidator
-    Private _propertyExceptions As New Dictionary(Of String, Exception)
+    Private _validator As FvValidatorBase
+    Private _propertyExceptions As New Dictionary(Of FvPropertyChain, Exception)
     Private _invalidatedBindingExpressions As New List(Of BindingExpression)
 
     ''' <summary>
@@ -66,10 +66,10 @@ Public Class ValidationProxy
     ''' </summary>
     ''' <returns>Validation result containing possible errors collection.</returns>
     ''' <remarks>Returned results contains both, the exception errors (from WPF) and the validation ones (from validator).</remarks>
-    Public Function Validate() As ForvalidateResult
+    Public Function Validate() As FvResult
         Dim result = _validator.Validate(Target)
         For Each item In _propertyExceptions
-            result.Combine(New ForvalidateResult(item.Key, item.Value.Message, ValidationErrorSource.Rule))
+            result.Errors.Add(New FvError(item.Value.Message, New FvPropertyChain(item.Key)))
         Next
         Return result
     End Function
@@ -79,17 +79,22 @@ Public Class ValidationProxy
     ''' </summary>
     ''' <returns>Validation result containing possible errors collection.</returns>
     ''' <remarks>Returned results contains both, the exception errors (from WPF) and the validation ones (from validator).</remarks>
-    Public Function Validate(ByVal propertyName As String) As ForvalidateResult
+    Public Function Validate(ByVal propertyName As String) As FvResult
         Return _validator.Validate(Target, propertyName)
     End Function
 
-    Protected Sub New(ByVal target As Object, ByVal validator As IValidator)
+    Protected Sub New(ByVal target As Object, ByVal validator As FvValidatorBase)
         _targetReference = New WeakReference(target)
         _validator = validator
     End Sub
 
     Public Sub SetPropertyException(ByVal propertyName As String, ByVal e As Exception)
-        _propertyExceptions(propertyName) = e
+        Dim key = _propertyExceptions.Keys.FirstOrDefault(Function(p) p.Path = propertyName)
+        If key Is Nothing Then
+            _propertyExceptions.Add(New FvPropertyChain(propertyName), e)
+        Else
+            _propertyExceptions(key) = e
+        End If
     End Sub
 
     Public Sub AddInvalidatedBindingExpression(ByVal bindingExpression As BindingExpression)
@@ -109,16 +114,20 @@ Public Class ValidationProxy
     End Sub
 
     Public Sub ClearPropertyException(ByVal propertyName As String)
-        _propertyExceptions.Remove(propertyName)
+        Dim key = _propertyExceptions.Keys.FirstOrDefault(Function(p) p.Path = propertyName)
+        If key IsNot Nothing Then
+            _propertyExceptions.Remove(key)
+        End If
     End Sub
 
-    Private Shared _validatorInstances As New Dictionary(Of Type, IValidator)
-    Public Shared Function GetValidatorInstance(Of TValidator As {IValidator, New})()
-        If _validatorInstances.ContainsKey(GetType(TValidator)) Then
-            Return _validatorInstances(GetType(TValidator))
+    Private Shared _validatorInstances As New Dictionary(Of Type, FvValidatorBase)
+    Public Shared Function GetValidatorInstance(Of TValidator As {FvValidatorBase, New})()
+        Dim type = GetType(TValidator)
+        If _validatorInstances.ContainsKey(type) Then
+            Return _validatorInstances(type)
         Else
             Dim instance = New TValidator
-            _validatorInstances.Add(GetType(TValidator), instance)
+            _validatorInstances.Add(type, instance)
             Return instance
         End If
     End Function

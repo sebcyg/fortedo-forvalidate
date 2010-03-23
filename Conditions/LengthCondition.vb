@@ -1,29 +1,27 @@
 ﻿Namespace Conditions
 
+    Public Class LengthCondition
+        Inherits FvConditionBase
 
-    Public Class LengthCondition(Of TObject) : Implements ICondition(Of TObject)
         Private _minLength As Int32
         Private _maxLength As Int32
-
-        Public Function Validate(ByVal obj As TObject, ByVal validatedProperty As ForvalidateProperty) As ForvalidateResult _
-            Implements ICondition(Of TObject).Validate
-            Dim value = TryCast(validatedProperty.Value, String)
-            If value Is Nothing Then
-                Return New ForvalidateResult(validatedProperty.Name, "Właściwość $propertyName$ jest nieprawidłowa.", ValidationErrorSource.Rule)
-            Else
-                If value.Length >= _minLength And value.Length <= _maxLength Then
-                    Return New ForvalidateResult
-                Else
-                    Return New ForvalidateResult(validatedProperty.Name, _
-                                                String.Format("Właściwość $propertyName$ musi mieć długość {0}-{1} znaków.", _minLength, _maxLength), ValidationErrorSource.Rule)
-                End If
-            End If
-        End Function
 
         Public Sub New(ByVal minLength As Int32, ByVal maxLength As Int32)
             _minLength = minLength
             _maxLength = maxLength
         End Sub
 
+        Protected Overrides Function OnValidate(ByVal context As FvContext) As String
+            Dim value = TryCast(context.PropertyValue, String)
+            If value Is Nothing Then
+                Return "Właściwość $propertyName$ jest nieprawidłowa."
+            Else
+                If value.Length >= _minLength And value.Length <= _maxLength Then
+                    Return Nothing
+                Else
+                    Return String.Format("Właściwość $propertyName$ musi mieć długość {0}-{1} znaków.", _minLength, _maxLength)
+                End If
+            End If
+        End Function
     End Class
 End Namespace

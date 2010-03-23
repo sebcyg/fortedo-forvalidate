@@ -7,12 +7,12 @@ Public Module ValidationProxyExtensions
     End Function
 
     <Extension()> _
-    Public Function SetProxy(ByVal target As Object, ByVal validator As IValidator) As ValidationProxy
+    Public Function SetProxy(ByVal target As Object, ByVal validator As FvValidatorBase) As ValidationProxy
         Return ValidationProxy.SetProxy(target, validator)
     End Function
 
     <Extension()> _
-    Public Function SetProxy(Of TValidator As {IValidator, New})(ByVal target As Object) As ValidationProxy
+    Public Function SetProxy(Of TValidator As {FvValidatorBase, New})(ByVal target As Object) As ValidationProxy
         Return ValidationProxy.SetProxy(target, ValidationProxy.GetValidatorInstance(Of TValidator)())
     End Function
 
