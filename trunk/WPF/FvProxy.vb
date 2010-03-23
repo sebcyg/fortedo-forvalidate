@@ -8,9 +8,9 @@ Namespace Wpf
     ''' Represents a proxy to integrate Forvalidate framework with WPF.
     ''' </summary>
     ''' <remarks>Each Proxy object consists of metadata extending data model object bound to WPF UI elements.</remarks>
-    Public Class ValidationProxy
+    Public Class FvProxy
 
-        Private Shared _proxies As New List(Of ValidationProxy)
+        Private Shared _proxies As New List(Of FvProxy)
 
         ''' <summary>
         ''' Gets instance of proxy associated with the specified target object.
@@ -18,7 +18,7 @@ Namespace Wpf
         ''' <param name="target">The object which proxy is about to being get.</param>
         ''' <returns>The proxy associated with the specified object, if found; otherwise, null (Nothing in VB). </returns>
         ''' <remarks></remarks>
-        Public Shared Function GetProxy(ByVal target As Object) As ValidationProxy
+        Public Shared Function GetProxy(ByVal target As Object) As FvProxy
             Return _proxies.Find(Function(p) Object.ReferenceEquals(p.Target, target))
         End Function
 
@@ -29,12 +29,12 @@ Namespace Wpf
         ''' <param name="validator">The validator instance associated with object.</param>
         ''' <returns>The proxy set by the method.</returns>
         ''' <remarks>If a proxy for the specified target exists, the method does not create a new one, but changes associated validator only.</remarks>
-        Public Shared Function SetProxy(ByVal target As Object, ByVal validator As FvValidatorBase) As ValidationProxy
+        Public Shared Function SetProxy(ByVal target As Object, ByVal validator As FvValidatorBase) As FvProxy
             Dim proxy = GetProxy(target)
             If proxy IsNot Nothing Then
                 proxy._validator = validator
             Else
-                proxy = New ValidationProxy(target, validator)
+                proxy = New FvProxy(target, validator)
                 _proxies.Add(proxy)
             End If
             Return proxy
@@ -49,7 +49,7 @@ Namespace Wpf
 
         Private _targetReference As WeakReference
         Private _validator As FvValidatorBase
-        Private _propertyExceptions As New Dictionary(Of FvPropertyChain, Exception)
+        Private _propertyExceptions As New List(Of FvError)
         Private _invalidatedBindingExpressions As New List(Of BindingExpression)
 
         ''' <summary>
@@ -72,7 +72,7 @@ Namespace Wpf
         Public Function Validate() As FvResult
             Dim result = _validator.Validate(Target)
             For Each item In _propertyExceptions
-                result.Errors.Add(New FvError(item.Value.Message, New FvPropertyChain(item.Key)) With {.Source = FvError.ErrorSource.Exception})
+                result.Errors.Add(item)
             Next
             Return result
         End Function
@@ -85,8 +85,8 @@ Namespace Wpf
         Public Function Validate(ByVal propertyName As String) As FvResult
             Dim result = _validator.Validate(Target, propertyName)
             Dim specifiedChain = New FvPropertyChain(propertyName)
-            For Each item In _propertyExceptions.Where(Function(entry) entry.Key.CheckSimilarity(specifiedChain))
-                result.Errors.Add(New FvError(item.Value.Message, New FvPropertyChain(item.Key)) With {.Source = FvError.ErrorSource.Exception})
+            For Each item In _propertyExceptions.Where(Function(entry) entry.PropertyChain.CheckSimilarity(specifiedChain))
+                result.Errors.Add(item)
             Next
             Return result
         End Function
@@ -96,13 +96,12 @@ Namespace Wpf
             _validator = validator
         End Sub
 
-        Public Sub SetPropertyException(ByVal propertyName As String, ByVal e As Exception)
-            Dim key = _propertyExceptions.Keys.FirstOrDefault(Function(p) p.Path = propertyName)
-            If key Is Nothing Then
-                _propertyExceptions.Add(New FvPropertyChain(propertyName), e)
-            Else
-                _propertyExceptions(key) = e
+        Public Sub SetPropertyException(ByVal propertyPath As String, ByVal message As String)
+            Dim existingError = _propertyExceptions.FirstOrDefault(Function(er) er.OriginalPath = propertyPath)
+            If existingError Is Nothing Then
+                _propertyExceptions.Remove(existingError)
             End If
+            _propertyExceptions.Add(New FvError(message, New FvPropertyChain(propertyPath)) With {.Source = FvError.ErrorSource.Exception})
         End Sub
 
         Public Sub AddInvalidatedBindingExpression(ByVal bindingExpression As BindingExpression)
@@ -121,10 +120,10 @@ Namespace Wpf
             Next
         End Sub
 
-        Public Sub ClearPropertyException(ByVal propertyName As String)
-            Dim key = _propertyExceptions.Keys.FirstOrDefault(Function(p) p.Path = propertyName)
-            If key IsNot Nothing Then
-                _propertyExceptions.Remove(key)
+        Public Sub ClearPropertyException(ByVal propertyPath As String)
+            Dim existingError = _propertyExceptions.FirstOrDefault(Function(er) er.OriginalPath = propertyPath)
+            If existingError IsNot Nothing Then
+                _propertyExceptions.Remove(existingError)
             End If
         End Sub
 
