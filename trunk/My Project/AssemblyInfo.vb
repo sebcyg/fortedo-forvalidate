@@ -34,4 +34,4 @@ Imports System.Windows.Markup
 
 <Assembly: AssemblyVersion("1.0.0.0")> 
 <Assembly: AssemblyFileVersion("1.0.0.0")> 
-<Assembly: XmlnsDefinition("http://forvalidate.fortedo.com", "Fortedo.ForValidate")> 
+<Assembly: XmlnsDefinition("http://forvalidate.fortedo.com", "Fortedo.ForValidate.Wpf")> 

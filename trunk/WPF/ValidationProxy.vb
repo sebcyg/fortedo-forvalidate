@@ -72,7 +72,7 @@ Namespace Wpf
         Public Function Validate() As FvResult
             Dim result = _validator.Validate(Target)
             For Each item In _propertyExceptions
-                result.Errors.Add(New FvError(item.Value.Message, New FvPropertyChain(item.Key)))
+                result.Errors.Add(New FvError(item.Value.Message, New FvPropertyChain(item.Key)) With {.Source = FvError.ErrorSource.Exception})
             Next
             Return result
         End Function
