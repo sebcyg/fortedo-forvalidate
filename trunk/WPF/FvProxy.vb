@@ -50,6 +50,23 @@ Namespace Wpf
             End If
         End Sub
 
+        Public Shared Function Validate(ByVal target As Object) As FvResult
+            Dim proxy = GetProxy(target)
+            Return proxy.Validate()
+        End Function
+
+        Public Shared Function Validate(ByVal target As Object, ByVal propertyPath As String) As FvResult
+            Dim proxy = GetProxy(target)
+            Return proxy.Validate(propertyPath)
+        End Function
+
+        Public Shared Sub ForceValidation(ByVal target As Object)
+            Dim proxy = GetProxy(target)
+            For Each bindingExp In proxy._invalidatedBindingExpressions.ToList()
+                bindingExp.UpdateSource()
+            Next
+        End Sub
+
         Private _targetReference As WeakReference
         Private _validator As FvValidatorBase
         Private _propertyExceptions As New List(Of FvError)
@@ -106,23 +123,6 @@ Namespace Wpf
             End If
             _propertyExceptions.Add(New FvError(message, New FvPropertyChain(propertyPath)) With {.Source = FvError.ErrorSource.Exception})
         End Sub
-
-        Public Sub AddInvalidatedBindingExpression(ByVal bindingExpression As BindingExpression)
-            If Not _invalidatedBindingExpressions.Contains(bindingExpression) Then
-                _invalidatedBindingExpressions.Add(bindingExpression)
-            End If
-        End Sub
-
-        Public Sub RemoveInvalidatedBindingExpression(ByVal bindingExpression As BindingExpression)
-            _invalidatedBindingExpressions.Remove(bindingExpression)
-        End Sub
-
-        Public Sub ForceValidation()
-            For Each bindingExp In _invalidatedBindingExpressions.ToList()
-                bindingExp.UpdateSource()
-            Next
-        End Sub
-
         Public Sub ClearPropertyException(ByVal propertyPath As String)
             Dim existingError = _propertyExceptions.FirstOrDefault(Function(er) er.OriginalPath = propertyPath)
             If existingError IsNot Nothing Then
@@ -130,5 +130,13 @@ Namespace Wpf
             End If
         End Sub
 
+        Public Sub AddInvalidatedBindingExpression(ByVal bindingExpression As BindingExpression)
+            If Not _invalidatedBindingExpressions.Contains(bindingExpression) Then
+                _invalidatedBindingExpressions.Add(bindingExpression)
+            End If
+        End Sub
+        Public Sub RemoveInvalidatedBindingExpression(ByVal bindingExpression As BindingExpression)
+            _invalidatedBindingExpressions.Remove(bindingExpression)
+        End Sub
     End Class
 End Namespace
