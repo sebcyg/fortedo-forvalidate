@@ -29,6 +29,17 @@ Public Class FvPropertyChain
         End Get
     End Property
 
+    Public Function CheckSimilarity(ByVal chainSpecified As FvPropertyChain) As Boolean
+        Dim i As Integer
+        For Each prop In Me
+            If chainSpecified.Count > i AndAlso prop.Name <> chainSpecified(i).Name Then
+                Return False
+            End If
+            i += 1
+        Next
+        Return True
+    End Function
+
     Public Sub New()
         MyBase.New()
     End Sub

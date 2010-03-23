@@ -83,7 +83,12 @@ Namespace Wpf
         ''' <returns>Validation result containing possible errors collection.</returns>
         ''' <remarks>Returned results contains both, the exception errors (from WPF) and the validation ones (from validator).</remarks>
         Public Function Validate(ByVal propertyName As String) As FvResult
-            Return _validator.Validate(Target, propertyName)
+            Dim result = _validator.Validate(Target, propertyName)
+            Dim specifiedChain = New FvPropertyChain(propertyName)
+            For Each item In _propertyExceptions.Where(Function(entry) entry.Key.CheckSimilarity(specifiedChain))
+                result.Errors.Add(New FvError(item.Value.Message, New FvPropertyChain(item.Key)) With {.Source = FvError.ErrorSource.Exception})
+            Next
+            Return result
         End Function
 
         Protected Sub New(ByVal target As Object, ByVal validator As FvValidatorBase)

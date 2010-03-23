@@ -1,6 +1,22 @@
 ﻿Imports System.Text
 
 Public Class FvError
+    Public Enum ErrorSource
+        Validation
+        Exception
+    End Enum
+
+    Private _source As ErrorSource = ErrorSource.Validation
+    Public Property Source() As ErrorSource
+        Get
+            Return _source
+        End Get
+        Set(ByVal value As ErrorSource)
+            _source = value
+        End Set
+    End Property
+
+
     Private _message As String
     Public Property Message() As String
         Get
