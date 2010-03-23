@@ -12,13 +12,13 @@ Namespace Wpf
     Public Class FvBinding
         Inherits Binding
 
-        Private _message As String
-        Public Property Message() As String
+        Private _exceptionMessage As String
+        Public Property ExceptionMessage() As String
             Get
-                Return _message
+                Return _exceptionMessage
             End Get
             Set(ByVal value As String)
-                _message = value
+                _exceptionMessage = value
             End Set
         End Property
 
@@ -48,7 +48,7 @@ Namespace Wpf
             Dim bindingExp As BindingExpression = bindExpression
             Dim proxy = FvProxy.GetProxy(bindingExp.DataItem)
             Dim message As String
-            message = If(Me.Message, exception.Message)
+            message = If(Me.ExceptionMessage, exception.Message)
             If proxy IsNot Nothing Then
                 proxy.SetPropertyException(bindingExp.ParentBinding.Path.Path, message)
                 proxy.AddInvalidatedBindingExpression(bindingExp)

@@ -112,7 +112,6 @@
     <Compile Include="Conditions\NotEmptyCondition.vb" />
     <Compile Include="Conditions\NotNullCondition.vb" />
     <Compile Include="Wpf\FvProxy.vb" />
-    <Compile Include="Wpf\FvProxyExtensions.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
