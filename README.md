@@ -41,6 +41,9 @@ If Not result.IsValid Then
 End If
 ```
 
+## Wiki ##
+Further documentation on project's [Wiki](https://github.com/sebcyg/fortedo-forvalidate/wiki).
+
 # Requirements #
 
  * Microsoft .Net Framework 3.0
